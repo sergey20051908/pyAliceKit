@@ -4,6 +4,7 @@ from pyAliceKit.utils.dialogs import include_nodes
 river_story = include_nodes({
     "message": "river_start",
     "buttons": ["$river_choices"],
+    "keywords": ["river"],
     "childs": {
         "boat": {
             "message": "river_boat",

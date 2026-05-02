@@ -151,6 +151,9 @@
         "buttons": [
             "$river_choices"
         ],
+        "keywords": [
+            "river"
+        ],
         "childs": [
             "/start/choose_path/river/boat",
             "/start/choose_path/river/bridge"

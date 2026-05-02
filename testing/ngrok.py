@@ -16,7 +16,7 @@ def alice_handler(): # type: ignore
     
     # Предположим, что текст генерируется методом pyAlice.get_response_text() или аналогичным
     # text = "TEEST"  # Здесь должен быть ваш текст ответа, полученный из pyAlice
-
+    # text = "TEEST"  # Здесь должен быть ваш текст ответа, полученный из pyAlice
     # response = { # type: ignore
     #     "version": event.get("version"),
     #     "session": event.get("session"),

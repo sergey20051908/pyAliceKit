@@ -1,4 +1,5 @@
 from __future__ import annotations
+from tkinter import N
 from typing import TYPE_CHECKING
 
 import json
@@ -21,6 +22,10 @@ class DialogEngine:
         self.__pyAlice: "PyAlice" = pyAlice # type: ignore
         self.__dialogs_map_file: str = self.__settings.DIALOGS_MAP_FILE
         self.dialog: Optional[str] = None  # Текущий диалог, если он найден
+        self.__post_action_func: FunctionType | None = None
+        self.__post_action_func_code: str | None = None
+        self.__post_action_func_name: str = ""
+
 
         putting_dialog_constants_places(self.__settings)
 
@@ -92,6 +97,16 @@ class DialogEngine:
                 return result
             else:
                 raise DialogEngineErrors("chooser_invalid_result", context=result, language=self.__settings.DEBUG_LANGUAGE)
+            
+        if "post_action" in previous_dialog:
+            post_action_code: str = previous_dialog["post_action"]
+            post_action_name: str = previous_dialog.get("post_action_name", "")
+            
+            if post_action_name == "":
+                raise DialogEngineErrors("post_action_name_missing", language=self.__settings.DEBUG_LANGUAGE)
+            self.__post_action_func = load_user_function(post_action_code, post_action_name, self.__settings.DEBUG_LANGUAGE)
+            self.__post_action_func_code = post_action_code
+            self.__post_action_func_name = post_action_name
         
         return None
 
@@ -106,6 +121,8 @@ class DialogEngine:
         previous_path: str = self.__pyAlice.previous_dialogue # type: ignore
         previous_dialog = self.__pyAlice.dialogs.get_dialog(previous_path, {}) # type: ignore
 
+
+        print(previous_path, "find path", key_words)
         simple_dialog_path: str | None = self.__find_simple_dialog_path(
             came_message=came_message, # type: ignore
             activated_events=activated_events,
@@ -116,6 +133,7 @@ class DialogEngine:
         )
 
         if simple_dialog_path:
+            print(simple_dialog_path, "<-------- simple dialog path")
             self.dialog = simple_dialog_path
             return simple_dialog_path
 
@@ -188,8 +206,10 @@ class DialogEngine:
                     start_time=self.__pyAlice.start_time
                 )
 
+        print(scores, "<-------- dialog scores")
         result: str | None = max(scores, key=scores.get) if scores else None # type: ignore
         self.dialog = result
+
 
         if result:
             self.__pyAlice.add_log(
@@ -223,9 +243,12 @@ class DialogEngine:
         return dialog
     
     def apply_dialog(self: Self, dialog_path: Optional[str]) -> None:
+        print(dialog_path, "<------ in applying dialog")
         if self.__pyAlice.new:
             res: Optional[str] = self.get_message(self.__settings.STARTING_MESSAGE)
+            print(res, "<------ starting message")
             if res is not None:
+                print(res, "<------ starting message")
                 self.__pyAlice.result_message = res
                 self.__pyAlice.session_storage.set_service_storage("previous_dialogue", "/")
                 return
@@ -235,6 +258,7 @@ class DialogEngine:
                 language=self.__settings.DEBUG_LANGUAGE
             )
         if dialog_path:
+            print(dialog_path, "<------ applying dialog")
             dialog_data: Optional[dict[str, Any]] = self.get_dialog(dialog_path)
             # TODO: Добавить валидатор для dialogs
             if dialog_data and "message" in dialog_data:
@@ -245,3 +269,15 @@ class DialogEngine:
                 if image:
                     self.__pyAlice.image = self.__settings.IMAGES.get(image, {})
             self.__pyAlice.session_storage.set_service_storage("previous_dialogue", dialog_path)
+            print(self.__pyAlice.session_storage.get_all(), "<------ session storage")
+
+
+    def is_post_action(self: Self) -> bool:
+        return self.__post_action_func_code is not None
+    
+    def execute_post_action(self: Self) -> None:
+        if self.__post_action_func:
+            try:
+                self.__post_action_func(self.__pyAlice) # type: ignore
+            except Exception as e:
+                raise DialogEngineErrors("post_action_function_execution_failed", context=str(e), language=self.__settings.DEBUG_LANGUAGE)

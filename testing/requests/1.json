@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "locale": "ru-RU",
+    "timezone": "UTC",
+    "client_id": "ru.yandex.searchplugin/7.16 (none none; android 4.4.2)",
+    "interfaces": {
+      "screen": {},
+      "payments": {},
+      "account_linking": {}
+    }
+  },
+  "session": {
+    "message_id": 6,
+    "session_id": "8d6fb975-03b9-4375-b736-b5608ac74889",
+    "skill_id": "93c4c397-79f1-41f0-838a-2a016c055bb0",
+    "user": {
+      "user_id": "61CEB0C518EB856D32B1526B9FC741B8661ECE537B0CD342F1BEDA7F0E6C8D92"
+    },
+    "application": {
+      "application_id": "AB13246B45C6568EE996D1C020753BB7171B0FCCA15A37BD0AF454702506641A"
+    },
+    "user_id": "AB13246B45C6568EE996D1C020753BB7171B0FCCA15A37BD0AF454702506641A",
+    "new": false
+  },
+  "session_state": {
+    "pyAliceKit": {}
+  },
+  "state": {
+    "session": {
+      "pyAliceKit": {
+        "previous_dialogue": "/"
+      }
+    }
+  },
+  "request": {
+    "command": "начать",
+    "original_utterance": "начать",
+    "nlu": {
+      "tokens": [
+        "заново"
+      ],
+      "entities": [],
+      "intents": {}
+    },
+    "markup": {
+      "dangerous_context": false
+    },
+    "type": "SimpleUtterance"
+  },
+  "version": "1.0"
+}

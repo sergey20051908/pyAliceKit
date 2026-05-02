@@ -12,6 +12,8 @@ class KeyWords():
         self.key_words_map: dict[str, list[str]] = self.settings.KEY_WORDS
         self.key_words: list[str] = []
 
+        print(self.key_words_map)
+
         if self.settings.DEBUG:
             self._validate_key_words()
 

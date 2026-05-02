@@ -8,7 +8,7 @@ from pyAliceKit.py_alice.py_alice import PyAlice
 params_alice: dict[Any, Any] = {
     "request": {
         "command": "Привет",
-        "original_utterance": "Привет",
+        "original_utterance": "Привет, начать",
         "type": "SimpleUtterance",
         "nlu": {
             "tokens": ["привет, начать"],
@@ -26,7 +26,7 @@ params_alice: dict[Any, Any] = {
     },
     "version": "1.0"
 }
-with open("testing/request4.json", "r", encoding="utf-8") as file:
+with open("testing/requests/1.json", "r", encoding="utf-8") as file:
     params_alice = json.load(file)
 
 @on_event("storageFillEvent")
@@ -52,3 +52,4 @@ print(alice.dialogs.dialog, "<-------- index.py")  # type: ignore # Вывод �
 # print(alice.get_params_for_alice()) 
 print(alice.buttons.current_buttons)  # type: ignore # Вывод кнопок, доступных в текущем диалоге
 # print(settings.DIALOG_NODES)
+print(alice.get_response_for_alice(type="json"))  # type: ignore # Вывод ответа для Алисы в виде словаря

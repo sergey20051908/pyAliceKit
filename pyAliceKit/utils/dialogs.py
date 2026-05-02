@@ -31,6 +31,11 @@ def flatten_dialogs(dialogs: dict[str, Any], base_path: str = "") -> dict[str, A
             flat_node["chooser"] = inspect.getsource(flat_node["chooser"]).strip()
             flat_node["chooser_name"] = function_name
 
+        if "post_action" in flat_node and callable(flat_node["post_action"]):
+            function_name: str = flat_node["post_action"].__name__
+            flat_node["post_action"] = inspect.getsource(flat_node["post_action"]).strip()
+            flat_node["post_action_name"] = function_name
+
         full_path = f"/{path}"
         child_paths = []
 

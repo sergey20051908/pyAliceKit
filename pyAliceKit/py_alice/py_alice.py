@@ -26,7 +26,12 @@ class PyAlice(Base):
             pyAlice=self
         )
         path_dialog: Optional[str] = self.dialogs.find_best_dialog()
+        print(path_dialog, "<----- main class dio path")
         self.dialogs.apply_dialog(path_dialog)
+
+        if self.dialogs.is_post_action():
+            self.dialogs.execute_post_action()
+
     
 
     def __processing_params(self: Self) -> None:

@@ -32,9 +32,13 @@ main {
 .container {
     background: white;
     padding: 0 2rem;
-    max-width: 1280px;
+    max-width: 1920px;
     margin: 0 auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.none {
+    display: none;
 }
 
 ul {
